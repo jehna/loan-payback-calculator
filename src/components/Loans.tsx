@@ -57,7 +57,7 @@ export default ({ loans = Atom.create<Loan[]>([]) }) => {
   }
   return (
     <>
-      <h1>Add your loans:</h1>
+      <h1>My loans:</h1>
       <Table>
         <thead>
           <tr>
