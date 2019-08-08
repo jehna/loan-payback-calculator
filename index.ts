@@ -7,6 +7,11 @@ type Loan = {
   leftover: number;
 };
 
+type SumByFn = <Prop extends string, T extends { [Key in Prop]: number }>(
+  prop: Prop,
+  arr: T[]
+) => number;
+
 const loans: readonly Loan[] = [
   { name: "laina 1", installment: 50.0, leftover: 1776.39 },
   { name: "laina 2", installment: 60.0, leftover: 798.03 },
@@ -31,10 +36,10 @@ const loans: readonly Loan[] = [
 
 const randomize = <T>(arr: readonly T[]): T[] =>
   [...arr].sort(() => Math.random() - 0.5);
-const sumByLeftover = (arr: readonly Loan[]) =>
-  arr.reduce((sum, item) => item.leftover + sum, 0);
-const sumByInstallment = (arr: readonly Loan[]) =>
-  arr.reduce((sum, item) => item.installment + sum, 0);
+const sumBy: SumByFn = (prop, arr) =>
+  arr.reduce((sum, item) => item[prop] + sum, 0);
+const sumByLeftover = (arr: Loan[]) => sumBy("leftover", arr);
+const sumByInstallment = (arr: Loan[]) => sumBy("installment", arr);
 
 let best: Loan[] = [];
 let iterations = 0;
