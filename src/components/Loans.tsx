@@ -3,6 +3,7 @@ import { Atom, F } from '@grammarly/focal'
 import { Loan } from '../types'
 import { mapElems } from '../utils/focal-utils'
 import { sumBy } from '../utils/list-utils'
+import { money } from '../utils/format-utils'
 import styled from 'styled-components'
 import NewLoan from './NewLoan'
 import ActionButton from './ActionButton'
@@ -47,9 +48,6 @@ const Remove = styled(ActionButton)`
     opacity: 1;
   }
 `
-
-const money = (num: number) =>
-  num.toLocaleString('fi', { currency: 'EUR', style: 'currency' })
 
 export default ({ loans = Atom.create<Loan[]>([]) }) => {
   const removeLoanAtIndex = (toRemove: number) => () => {

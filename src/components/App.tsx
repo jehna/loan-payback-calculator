@@ -4,6 +4,7 @@ import Loans from './Loans'
 import { Atom } from '@grammarly/focal'
 import { Loan } from '../types'
 import { persist } from '../utils/focal-utils'
+import PayoutCalculator from './PayoutCalculator'
 
 const Page = styled.div`
   font-size: 18px;
@@ -27,6 +28,7 @@ export default ({ state = Atom.create<AppState>(INITIAL_STATE) }) => {
   return (
     <Page>
       <Loans loans={state.lens('loans')} />
+      <PayoutCalculator loans={state.lens('loans')} />
     </Page>
   )
 }
