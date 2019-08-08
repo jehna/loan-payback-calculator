@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open"
+    "start": "http-server public/",
+    "dev": "webpack-dev-server",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
@@ -28,5 +30,8 @@
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2"
+  },
+  "dependencies": {
+    "http-server": "^0.11.1"
   }
 }
