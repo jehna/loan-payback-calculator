@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import ActionButton from './ActionButton'
 import { Atom, F, lift } from '@grammarly/focal'
 import { Loan } from '../types'
 
@@ -24,28 +25,9 @@ const Input = styled(F.input)`
   }
 `
 
-const Add = lift(styled.button`
-  border: 0;
-  border-radius: 0.3em;
-  appearance: none;
-  background: cornflowerblue;
+const Add = lift(styled(ActionButton)`
   opacity: ${props => (props.disabled ? 0.2 : 1)};
-  position: absolute;
-  left: 100%;
-  height: 90%;
-  top: 0;
-  font-size: 1.5em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 0.5em 0.1em;
-  margin-left: 0.5em;
-  color: white;
 `)
-
-const Td = styled.td`
-  position: relative;
-`
 
 type DraftLoan = Partial<Loan>
 
@@ -67,15 +49,15 @@ export default ({
 
   return (
     <tr>
-      <Td>
+      <td>
         <Input
           placeholder="My first loan"
           value={name.view(n => n || '')}
           onChange={e => name.set(e.currentTarget.value)}
           onKeyDown={handleEnter}
         />
-      </Td>
-      <Td>
+      </td>
+      <td>
         <Input
           placeholder="100"
           type="number"
@@ -89,8 +71,8 @@ export default ({
           onKeyDown={handleEnter}
         />{' '}
         €/mo
-      </Td>
-      <Td>
+      </td>
+      <td>
         <Input
           placeholder="1000"
           type="number"
@@ -104,10 +86,12 @@ export default ({
           onKeyDown={handleEnter}
         />{' '}
         €
+      </td>
+      <td>
         <Add disabled={isValid.view(v => !v)} onClick={setNewLoan}>
           +
         </Add>
-      </Td>
+      </td>
     </tr>
   )
 }
