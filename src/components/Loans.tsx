@@ -7,6 +7,8 @@ import { money } from '../utils/format-utils'
 import styled from 'styled-components'
 import NewLoan from './NewLoan'
 import ActionButton from './ActionButton'
+import { withLatestFrom, filter } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 
 const Table = styled.table`
   border: 1px;
@@ -62,6 +64,7 @@ export default ({ loans = Atom.create<Loan[]>([]) }) => {
             <th>Name</th>
             <th>Installment</th>
             <th>Leftover</th>
+            <th>Months left</th>
             <th />
           </tr>
         </thead>
@@ -73,6 +76,7 @@ export default ({ loans = Atom.create<Loan[]>([]) }) => {
                 <td>{loan.name}</td>
                 <td align="right">{money(loan.installment)}/mo</td>
                 <td>{money(loan.leftover)}</td>
+                <td>{Math.ceil(loan.leftover / loan.installment)}</td>
                 <td>
                   <Remove onClick={removeLoanAtIndex(i)}>-</Remove>
                 </td>

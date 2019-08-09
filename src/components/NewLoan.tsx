@@ -1,13 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import ActionButton from './ActionButton'
-import { Atom, lift } from '@grammarly/focal'
+import { Atom, lift, F } from '@grammarly/focal'
 import { Loan } from '../types'
 import Input from './Input'
+import { combineLatest } from 'rxjs'
+import { filter, map, startWith } from 'rxjs/operators'
 
 const Add = lift(styled(ActionButton)`
   opacity: ${props => (props.disabled ? 0.2 : 1)};
 `)
+
+const both = <T1, T2>(s1: Atom<T1>, s2: Atom<T2>) =>
+  combineLatest(s1, s2).pipe(filter(([a, b]) => !!a && !!b))
 
 type DraftLoan = Partial<Loan>
 
@@ -66,6 +71,12 @@ export default ({
         />{' '}
         €
       </td>
+      <F.td>
+        {both(leftover, installment).pipe(
+          startWith([0, 0]),
+          map(([cl, ci]) => (cl && ci && Math.ceil(cl / ci)) || '')
+        )}
+      </F.td>
       <td>
         <Add disabled={isValid.view(v => !v)} onClick={setNewLoan}>
           +
