@@ -63,7 +63,7 @@ export default ({
               </p>
               {best.view(curr =>
                 curr.length > 0 ? (
-                  <>
+                  <React.Fragment key="bestloans">
                     <F.div>
                       Best loans to pay with{' '}
                       {extraMoney.view(c => c && money(c))}:
@@ -83,12 +83,12 @@ export default ({
                       your monthly payment by{' '}
                       {money(sumBy('installment', curr))}/mo
                     </div>
-                  </>
+                  </React.Fragment>
                 ) : (
-                  <F.Fragment>
+                  <F.Fragment key="loading">
                     {extraMoney.view(
                       currExtraMoney =>
-                        !!currExtraMoney && 'Crunching numbers...'
+                        !!currExtraMoney && <div>Crunching numbers...</div>
                     )}
                   </F.Fragment>
                 )
