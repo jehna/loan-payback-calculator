@@ -7,14 +7,7 @@ import { money } from '../utils/format-utils'
 import styled from 'styled-components'
 import { sumBy } from '../utils/list-utils'
 import Input from './Input'
-import { zip } from 'rxjs'
-import {
-  debounceTime,
-  filter,
-  flatMap,
-  withLatestFrom,
-  map
-} from 'rxjs/operators'
+import { debounceTime, filter, withLatestFrom, map } from 'rxjs/operators'
 
 const Container = styled(F.div)`
   margin: 2em 0;
