@@ -1,29 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import ActionButton from './ActionButton'
-import { Atom, F, lift } from '@grammarly/focal'
+import { Atom, lift } from '@grammarly/focal'
 import { Loan } from '../types'
-
-const ENTER_KEYCODE = 13
-
-const Input = styled(F.input)`
-  border: 0;
-  appearance: none;
-  font: inherit;
-  text-align: inherit;
-  margin: 0;
-  padding: 0;
-  width: 7em;
-  -moz-appearance: textfield;
-
-  &:invalid {
-    outline: none;
-    box-shadow: none;
-    text-decoration: red wavy underline;
-    line-height: 1.5em; /* Fixes wavy underline bug */
-    margin: -1em 0; /* Fixes line height */
-  }
-`
+import Input from './Input'
 
 const Add = lift(styled(ActionButton)`
   opacity: ${props => (props.disabled ? 0.2 : 1)};
@@ -44,8 +24,7 @@ export default ({
     loans.modify(l => [draft.get() as Loan, ...l])
     draft.set({})
   }
-  const handleEnter = (e: React.KeyboardEvent) =>
-    e.keyCode === ENTER_KEYCODE && isValid.get() && setNewLoan()
+  const onSubmit = () => isValid.get() && setNewLoan()
 
   return (
     <tr>
@@ -54,7 +33,7 @@ export default ({
           placeholder="My first loan"
           value={name.view(n => n || '')}
           onChange={e => name.set(e.currentTarget.value)}
-          onKeyDown={handleEnter}
+          onSubmit={onSubmit}
         />
       </td>
       <td>
@@ -68,7 +47,7 @@ export default ({
           }
           minLength={installment.view(i => (i ? 0 : 1))}
           value={installment.view(i => i || '')}
-          onKeyDown={handleEnter}
+          onSubmit={onSubmit}
         />{' '}
         €/mo
       </td>
@@ -83,7 +62,7 @@ export default ({
           }
           minLength={leftover.view(i => (i ? 0 : 1))}
           value={leftover.view(i => i || '')}
-          onKeyDown={handleEnter}
+          onSubmit={onSubmit}
         />{' '}
         €
       </td>

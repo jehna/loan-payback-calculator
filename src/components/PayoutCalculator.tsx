@@ -6,8 +6,17 @@ import { mapElems } from '../utils/focal-utils'
 import { money } from '../utils/format-utils'
 import styled from 'styled-components'
 import { sumBy } from '../utils/list-utils'
+import Input from './Input'
+import { zip } from 'rxjs'
+import {
+  debounceTime,
+  filter,
+  flatMap,
+  withLatestFrom,
+  map
+} from 'rxjs/operators'
 
-const Container = styled.div`
+const Container = styled(F.div)`
   margin: 2em 0;
   padding: 1em;
   border-radius: 0.4em;
@@ -18,7 +27,8 @@ const worker = new Worker(workerPath)
 
 export default ({
   loans = Atom.create<Loan[]>([]),
-  best = Atom.create<Loan[]>([])
+  best = Atom.create<Loan[]>([]),
+  extraMoney = Atom.create<number | undefined>(undefined)
 }) => {
   useEffect(() => {
     const handleMessage = (evt: MessageEvent) => best.set(JSON.parse(evt.data))
@@ -26,30 +36,72 @@ export default ({
     return () => worker.removeEventListener('message', handleMessage)
   }, [loans])
 
-  loans.subscribe(curr => worker.postMessage(JSON.stringify(curr)))
+  extraMoney
+    .pipe(
+      filter(Boolean),
+      debounceTime(1000),
+      withLatestFrom(loans),
+      map(v => ({ extraMoney: v[0], loans: v[1] }))
+    )
+    .subscribe(curr => {
+      worker.postMessage(JSON.stringify(curr))
+    })
 
   return (
     <F.Fragment>
-      {best.view(curr =>
-        curr.length > 0 ? (
-          <Container>
-            <div>Best loans to pay out if you had 1000€ extra:</div>
-            <ul>
-              {mapElems(
-                loan => (
-                  <li key={loan.name}>
-                    {loan.name} ({money(loan.installment)})
-                  </li>
-                ),
-                best
+      {loans.view(
+        currLoans =>
+          currLoans.length > 0 && (
+            <Container>
+              <p>
+                Calculate best loans to pay out if you have some extra money:
+              </p>
+              <p>
+                I have{' '}
+                <Input
+                  placeholder="500"
+                  type="number"
+                  onChange={e =>
+                    extraMoney.set(parseFloat(e.currentTarget.value))
+                  }
+                  value={extraMoney.view(i => i || '')}
+                />{' '}
+                € extra money to spend on paying back my loans.
+              </p>
+              {best.view(curr =>
+                curr.length > 0 ? (
+                  <>
+                    <F.div>
+                      Best loans to pay with{' '}
+                      {extraMoney.view(c => c && money(c))}:
+                    </F.div>
+                    <ul>
+                      {mapElems(
+                        loan => (
+                          <li key={loan.name}>
+                            {loan.name} ({money(loan.installment)}/mo)
+                          </li>
+                        ),
+                        best
+                      )}
+                    </ul>
+                    <div>
+                      Paying {money(sumBy('leftover', curr))} now would reduce
+                      your monthly payment by{' '}
+                      {money(sumBy('installment', curr))}/mo
+                    </div>
+                  </>
+                ) : (
+                  <F.Fragment>
+                    {extraMoney.view(
+                      currExtraMoney =>
+                        !!currExtraMoney && 'Crunching numbers...'
+                    )}
+                  </F.Fragment>
+                )
               )}
-            </ul>
-            <div>
-              This would reduce your monthly payment by{' '}
-              {money(sumBy('installment', curr))}/mo
-            </div>
-          </Container>
-        ) : null
+            </Container>
+          )
       )}
     </F.Fragment>
   )
