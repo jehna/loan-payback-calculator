@@ -5,14 +5,39 @@ import { Atom } from '@grammarly/focal'
 import { Loan } from '../types'
 import { persist } from '../utils/focal-utils'
 import PayoutCalculator from './PayoutCalculator'
+import Header from './Header'
+import colors from '../utils/colors'
 
 const Page = styled.div`
+  display: grid;
   font-size: 18px;
-  max-width: 60em;
-  margin: 0 auto;
-  height: 100%;
+  max-height: 100vh;
+  height: 100vh;
+  grid-template-columns: 65% auto;
+  grid-template-areas:
+    'header header'
+    'main aside';
+  grid-template-rows: auto;
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir,
     helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+  background: ${colors.background};
+  color: #fff;
+  align-content: start;
+  grid-column-gap: 30px;
+
+  header {
+    grid-area: header;
+  }
+
+  main {
+    grid-area: main;
+    overflow-y: scroll;
+  }
+
+  aside {
+    grid-area: aside;
+    overflow-y: scroll;
+  }
 `
 
 interface AppState {
@@ -27,8 +52,15 @@ export default ({ state = Atom.create<AppState>(INITIAL_STATE) }) => {
   persist('APPSTATE', state)
   return (
     <Page>
-      <Loans loans={state.lens('loans')} />
-      <PayoutCalculator loans={state.lens('loans')} />
+      <header>
+        <Header />
+      </header>
+      <main>
+        <Loans loans={state.lens('loans')} />
+      </main>
+      <aside>
+        <PayoutCalculator loans={state.lens('loans')} />
+      </aside>
     </Page>
   )
 }

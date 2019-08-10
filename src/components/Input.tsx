@@ -12,6 +12,7 @@ const Input = styled(F.input)`
   margin: 0;
   padding: 0;
   width: 7em;
+  color: inherit;
   -moz-appearance: textfield;
   background: transparent;
   text-align: ${props => (props.type === 'number' ? 'right' : 'left')};

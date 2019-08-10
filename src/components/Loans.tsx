@@ -5,23 +5,26 @@ import { mapElems } from '../utils/focal-utils'
 import { sumBy } from '../utils/list-utils'
 import { money } from '../utils/format-utils'
 import styled from 'styled-components'
+import { lighten } from 'polished'
 import NewLoan from './NewLoan'
 import ActionButton from './ActionButton'
-import { withLatestFrom, filter } from 'rxjs/operators'
-import { combineLatest } from 'rxjs'
+import colors from '../utils/colors'
 
 const Table = styled.table`
-  border: 1px;
+  border: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+  position: relative;
+  width: 100%;
 
   td,
   th {
     text-align: right;
     padding: 0.65em 0 0.65em 5em;
-    border-bottom: 1px solid #ddd;
 
     &:first-child {
       text-align: left;
-      padding-left: 0;
+      padding-left: 1.5em;
     }
 
     &:last-child {
@@ -29,17 +32,30 @@ const Table = styled.table`
     }
   }
 
-  th {
-    border-bottom-color: #aaa;
+  tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  thead tr {
+    position: sticky;
+    top: 0;
+    background: ${colors.background};
+    z-index: 1;
+    box-sizing: border-box;
+    border: 0;
+    box-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
   }
 
   tfoot td {
     border: 0;
   }
 
-  tbody tr:last-child td {
-    border-bottom-style: double;
-    border-bottom-width: 3px;
+  tbody {
+    background: rgba(0, 0, 0, 0.05);
+    tr:last-child {
+      border-bottom-style: double;
+      border-bottom-width: 3px;
+    }
   }
 `
 
@@ -57,14 +73,13 @@ export default ({ loans = Atom.create<Loan[]>([]) }) => {
   }
   return (
     <>
-      <h1>My loans:</h1>
       <Table>
         <thead>
           <tr>
             <th>Name</th>
             <th>Installment</th>
             <th>Leftover</th>
-            <th>Months left</th>
+            <th># left</th>
             <th />
           </tr>
         </thead>
