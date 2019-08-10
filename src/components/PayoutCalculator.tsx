@@ -8,20 +8,7 @@ import styled from 'styled-components'
 import { sumBy } from '../utils/list-utils'
 import Input from './Input'
 import { debounceTime, filter, withLatestFrom, map } from 'rxjs/operators'
-
-const Container = styled(F.div)`
-  margin: 2em 0;
-  padding: 1em;
-  border-radius: 0.4em;
-  background: rgba(255, 255, 255, 0.07);
-  box-sizing: border-box;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
-  margin-right: 1.5em;
-
-  h2 {
-    margin-top: 0;
-  }
-`
+import Card from './Card'
 
 const InputRow = styled.label`
   display: flex;
@@ -55,7 +42,7 @@ export default ({
   }, [extraMoney, $loans])
 
   return (
-    <Container>
+    <Card>
       <h2>Optimized loan payback</h2>
       <InputRow>
         <div>Extra money to spend on loan payback:</div>
@@ -95,6 +82,6 @@ export default ({
             </p>
           )
       )}
-    </Container>
+    </Card>
   )
 }

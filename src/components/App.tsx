@@ -7,6 +7,7 @@ import { persist } from '../utils/focal-utils'
 import PayoutCalculator from './PayoutCalculator'
 import Header from './Header'
 import colors from '../utils/colors'
+import Summary from './Summary'
 
 const Page = styled.div`
   display: grid;
@@ -60,6 +61,7 @@ export default ({ state = Atom.create<AppState>(INITIAL_STATE) }) => {
       </main>
       <aside>
         <PayoutCalculator loans={state.lens('loans')} />
+        <Summary loans={state.lens('loans')} />
       </aside>
     </Page>
   )

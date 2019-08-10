@@ -100,16 +100,6 @@ export default ({ loans = Atom.create<Loan[]>([]) }) => {
             loans
           )}
         </tbody>
-        <tfoot>
-          <tr>
-            <td>Total:</td>
-            <F.td>
-              {loans.view(curr => money(sumBy('installment', curr)))}/mo
-            </F.td>
-            <F.td>{loans.view(curr => money(sumBy('leftover', curr)))}</F.td>
-            <td />
-          </tr>
-        </tfoot>
       </Table>
     </>
   )
