@@ -62,3 +62,7 @@ the built `public/` folder from any static host.
 If you'd like to contribute, please fork the repository, open an issue to tell
 me what you want to do and use a feature branch. Pull requests are warmly
 welcome!
+
+## Licensing
+
+The code in this project is licensed under MIT license.
