@@ -1,6 +1,6 @@
 import React from 'react'
 import { Atom } from '@grammarly/focal'
-import { Loan } from '../types'
+import { LoanType } from '../types'
 import { mapElems } from '../utils/focal-utils'
 import { money } from '../utils/format-utils'
 import styled from 'styled-components'
@@ -65,7 +65,7 @@ const Remove = styled(ActionButton)`
   }
 `
 
-export default ({ loans = Atom.create<Loan[]>([]) }) => {
+export default ({ loans = Atom.create<LoanType[]>([]) }) => {
   const removeLoanAtIndex = (toRemove: number) => () => {
     loans.modify(c => c.filter((_, i) => i !== toRemove))
   }

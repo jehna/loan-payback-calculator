@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Loans from './Loans'
 import { Atom } from '@grammarly/focal'
-import { Loan } from '../types'
+import { LoanType } from '../types'
 import { persist } from '../utils/focal-utils'
 import PayoutCalculator from './PayoutCalculator'
 import Header from './Header'
@@ -42,7 +42,7 @@ const Page = styled.div`
 `
 
 interface AppState {
-  loans: Loan[]
+  loans: LoanType[]
 }
 
 const INITIAL_STATE: AppState = {

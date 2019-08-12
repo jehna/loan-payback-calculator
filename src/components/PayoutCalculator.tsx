@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import workerPath from 'file-loader?name=[name].js!../workers/maximize-payouts'
 import { Atom } from '@grammarly/focal'
-import { Loan } from '../types'
+import { LoanType } from '../types'
 import { mapElems } from '../utils/focal-utils'
 import { money } from '../utils/format-utils'
 import styled from 'styled-components'
@@ -19,8 +19,8 @@ const InputRow = styled.label`
 const worker = new Worker(workerPath)
 
 export default ({
-  loans: $loans = Atom.create<Loan[]>([]),
-  best = Atom.create<Loan[]>([]),
+  loans: $loans = Atom.create<LoanType[]>([]),
+  best = Atom.create<LoanType[]>([]),
   extraMoney = Atom.create<number | undefined>(undefined)
 }) => {
   useEffect(() => {

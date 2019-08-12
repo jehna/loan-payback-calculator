@@ -2,10 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import ActionButton from './ActionButton'
 import { Atom, lift, F } from '@grammarly/focal'
-import { Loan } from '../types'
+import { Loan, LoanType } from '../types'
 import Input from './Input'
 import { combineLatest } from 'rxjs'
 import { filter, map, startWith } from 'rxjs/operators'
+import { isRight } from 'fp-ts/lib/Either'
 
 const Add = lift(styled(ActionButton)`
   opacity: ${props => (props.disabled ? 0.2 : 1)};
@@ -14,21 +15,24 @@ const Add = lift(styled(ActionButton)`
 const both = <T1, T2>(s1: Atom<T1>, s2: Atom<T2>) =>
   combineLatest(s1, s2).pipe(filter(([a, b]) => !!a && !!b))
 
-type DraftLoan = Partial<Loan>
+type DraftLoan = Partial<LoanType>
 
 export default ({
-  loans = Atom.create<Loan[]>([]),
+  loans = Atom.create<LoanType[]>([]),
   draft = Atom.create<DraftLoan>({})
 }) => {
   const installment = draft.lens('installment')
   const name = draft.lens('name')
   const leftover = draft.lens('leftover')
-  const isValid = draft.view(d => !!(d.name && d.installment && d.leftover))
+  const isValid = draft.view(d => Loan.is(d))
   const interest = draft.lens('interest')
 
   const setNewLoan = () => {
-    loans.modify(l => [draft.get() as Loan, ...l])
-    draft.set({})
+    const newLoan = Loan.decode(draft.get())
+    if (isRight(newLoan)) {
+      loans.modify(l => [newLoan.right, ...l])
+      draft.set({})
+    }
   }
   const onSubmit = () => isValid.get() && setNewLoan()
 
