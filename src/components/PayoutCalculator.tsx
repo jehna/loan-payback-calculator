@@ -7,8 +7,9 @@ import { money } from '../utils/format-utils'
 import styled from 'styled-components'
 import { sumBy } from '../utils/list-utils'
 import Input from './Input'
-import { debounceTime, filter, withLatestFrom, map } from 'rxjs/operators'
+import { debounceTime, filter, map } from 'rxjs/operators'
 import Card from './Card'
+import { combineLatest } from 'rxjs'
 
 const InputRow = styled.label`
   display: flex;
@@ -29,11 +30,10 @@ export default ({
   }, [$loans])
 
   useEffect(() => {
-    extraMoney
+    combineLatest(extraMoney, $loans)
       .pipe(
-        filter(Boolean),
+        filter(v => !!v[0] && !!v[1].length),
         debounceTime(1000),
-        withLatestFrom($loans),
         map(v => ({ extraMoney: v[0], loans: v[1] }))
       )
       .subscribe(curr => {
