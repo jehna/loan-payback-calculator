@@ -76,6 +76,7 @@ export default ({ loans = Atom.create<Loan[]>([]) }) => {
           <tr>
             <th>Name</th>
             <th>Installment</th>
+            <th>Interest</th>
             <th>Leftover</th>
             <th># left</th>
             <th />
@@ -88,6 +89,7 @@ export default ({ loans = Atom.create<Loan[]>([]) }) => {
               <tr key={loan.name}>
                 <td>{loan.name}</td>
                 <td align="right">{money(loan.installment)}/mo</td>
+                <td>{loan.interest * 100} %</td>
                 <td>{money(loan.leftover)}</td>
                 <td>{Math.ceil(loan.leftover / loan.installment)}</td>
                 <td>

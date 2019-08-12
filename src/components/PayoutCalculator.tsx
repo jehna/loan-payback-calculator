@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import workerPath from 'file-loader?name=[name].js!../workers/maximize-payouts'
-import { Atom, F } from '@grammarly/focal'
+import { Atom } from '@grammarly/focal'
 import { Loan } from '../types'
 import { mapElems } from '../utils/focal-utils'
 import { money } from '../utils/format-utils'

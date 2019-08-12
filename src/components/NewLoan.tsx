@@ -24,6 +24,7 @@ export default ({
   const name = draft.lens('name')
   const leftover = draft.lens('leftover')
   const isValid = draft.view(d => !!(d.name && d.installment && d.leftover))
+  const interest = draft.lens('interest')
 
   const setNewLoan = () => {
     loans.modify(l => [draft.get() as Loan, ...l])
@@ -55,6 +56,21 @@ export default ({
           onSubmit={onSubmit}
         />{' '}
         €/mo
+      </td>
+      <td>
+        <Input
+          placeholder="5"
+          type="number"
+          min="0"
+          step="any"
+          onChange={e =>
+            interest.set(parseFloat(e.currentTarget.value) / 100 || undefined)
+          }
+          minLength={interest.view(i => (i ? 0 : 1))}
+          value={interest.view(i => (i ? i * 100 : ''))}
+          onSubmit={onSubmit}
+        />{' '}
+        %
       </td>
       <td>
         <Input
